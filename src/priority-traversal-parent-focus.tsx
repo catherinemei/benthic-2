@@ -602,12 +602,12 @@ export function HypergraphNodeComponentKeyboardOnly(
             <li
               aria-label={`${idx() + 1} of ${sortAdjacents().length}. ${
                 adjacent.displayName
-              }; ${adjacent.descriptionTokens?.longDescription}`}
+              }${adjacent.descriptionTokens?.longDescription}`}
               id={`info-${adjacent.id}`}
               onClick={() => props.onNodeClick(props.node.id, adjacent.id)}
               tabindex="0"
             >
-              <span aria-hidden="true">{`${adjacent.displayName}; ${adjacent.descriptionTokens?.longDescription}`}</span>
+              <span aria-hidden="true">{`${adjacent.displayName}${adjacent.descriptionTokens?.longDescription}`}</span>
             </li>
           )}
         </For>
