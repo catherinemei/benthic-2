@@ -1,7 +1,7 @@
 import type { Component } from "solid-js";
 import { TraversalOutputComponentKeyboardParentFocus } from "./priority-traversal-parent-focus";
 
-import { pulleyHypergraph } from "./input-pulley";
+import { pulleyHypergraph } from "./input-pulley-hard";
 
 const App: Component = () => {
   return (

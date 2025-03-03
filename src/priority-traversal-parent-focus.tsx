@@ -132,9 +132,15 @@ export function TraversalOutputComponentKeyboardParentFocus(
       const focusedElementId = focusedElement?.id;
       const historyList = history();
 
-      // Select current parent node in focus
-      if (focusedElementId === "parents-group") {
-        console.log("trying to select current parent node in focus");
+      if (
+        currentNode().displayName.startsWith("Hangs") ||
+        currentNode().displayName.startsWith("Anchor")
+      ) {
+        // Hack for user study - do not let users go up on Hangs/anchor relations
+        const parentSection = document.getElementById(`parents-group`);
+        parentSection?.focus();
+      } else if (focusedElementId === "parents-group") {
+        // Select current parent node in focus
         if (historyList.length == 2) {
           // First level child going back to root node
           const curNodeId = historyList.pop();
@@ -183,7 +189,6 @@ export function TraversalOutputComponentKeyboardParentFocus(
           parentSection?.focus();
         }
       } else if (focusedElementId.startsWith("context-")) {
-        console.log("trying to select new node in focus");
         // Select new parent node in focus
 
         const curNodeId = historyList.pop();
@@ -375,14 +380,13 @@ export function TraversalOutputComponentKeyboardParentFocus(
 
         event.preventDefault();
       } else if (focusedElementId.startsWith("context")) {
-        // Navigating around while on one of the nodes within parent-context list
+        // Navigating around while on one of the nodes within option-nodes list
         const contextElms = Array.from(
-          document.querySelectorAll(`#parent-context li`)
+          document.querySelectorAll(`#option-nodes li`)
         ) as HTMLElement[];
 
         const currentIndex = contextElms.indexOf(focusedElement);
         let newIndex = currentIndex;
-        console.log(currentIndex);
 
         if (
           (event.key === "ArrowLeft" || event.key === "ArrowUp") &&
@@ -409,6 +413,7 @@ export function TraversalOutputComponentKeyboardParentFocus(
           const parentGroup = document.getElementById("parents-group");
           parentGroup?.focus();
         }
+
         event.preventDefault();
       } else if (focusedElementId === "parents-group") {
         // Selecting another parent to focus on
@@ -475,7 +480,12 @@ export function TraversalOutputComponentKeyboardParentFocus(
       <HypergraphNodeComponentKeyboardOnly
         history={history()}
         parentFocusId={
-          history().length > 1 ? history()[history().length - 2] : "-1"
+          history().length > 1
+            ? currentNode().displayName.startsWith("Hangs") ||
+              currentNode().displayName.startsWith("Anchor")
+              ? "-1"
+              : history()[history().length - 2]
+            : "-1"
         }
         node={currentNode()}
         nodeGraph={props.nodeGraph}
@@ -507,6 +517,15 @@ export function HypergraphNodeComponentKeyboardOnly(
   const sortAdjacents = createMemo(() => {
     const adjacentNodeIds = findSiblings(props.node.id);
 
+    // If the current node is one of Anchor or Hangs, then only show the node in the sibling list
+    // Else filter out all of those nodes
+    if (
+      props.node.displayName.startsWith("Hangs") ||
+      props.node.displayName.startsWith("Anchor")
+    ) {
+      return [props.node];
+    }
+
     const adjacentNodes = Array.from(adjacentNodeIds)
       .map((nodeId) => props.nodeGraph[nodeId])
       .sort((a, b) => {
@@ -519,11 +538,27 @@ export function HypergraphNodeComponentKeyboardOnly(
         return Number(a.id) - Number(b.id);
       });
 
-    return adjacentNodes;
+    // Hack for user study - do not show any nodes that start with Hangs
+    const actualNodes = adjacentNodes.filter((n) => {
+      return (
+        !n.displayName.startsWith("Hangs") &&
+        !n.displayName.startsWith("Anchor")
+      );
+    });
+
+    return actualNodes;
   });
 
   const nonFocusedParentIds = createMemo(() => {
     const parentIds = props.node.parents;
+
+    // Hack - prevents hangs relation from showing up at top level
+    if (
+      props.node.displayName.startsWith("Hangs") ||
+      props.node.displayName.startsWith("Anchor")
+    ) {
+      return [];
+    }
 
     // Root node - has no parents, so no non-focused parents
     if (props.history.length == 1) {
