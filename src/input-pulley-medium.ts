@@ -4,12 +4,11 @@ export const pulleyHypergraph: Hypergraph = {
   "0": {
     id: "0",
     displayName: "Pulley diagram",
-    description:
-      "A mechanical system consisting of pulleys, ropes, and weights.",
+    description: "A mechanical system consisting of pulleys, ropes, and boxes.",
     descriptionTokens: {
       label: "",
       longDescription:
-        ". A mechanical system consisting of pulleys, ropes, and weights.",
+        ". A mechanical system consisting of pulleys, ropes, and boxes.",
       shortDescription: "",
     },
     parents: [],
@@ -73,11 +72,11 @@ export const pulleyHypergraph: Hypergraph = {
   },
   "4": {
     id: "4",
-    displayName: "Weight W1",
+    displayName: "Box B1",
     description: "",
     descriptionTokens: {
       label: "",
-      longDescription: "; Weight 4 units.",
+      longDescription: "; Weight of 4 units.",
       shortDescription: "",
     },
     parents: ["0", "18"],
@@ -86,7 +85,7 @@ export const pulleyHypergraph: Hypergraph = {
   },
   "5": {
     id: "5",
-    displayName: "Weight W2",
+    displayName: "Box B2",
     description: "",
     descriptionTokens: {
       label: "",
@@ -255,7 +254,7 @@ export const pulleyHypergraph: Hypergraph = {
   },
   "18": {
     id: "18",
-    displayName: "Hangs: Weight W1 hangs from Rope 2",
+    displayName: "Hangs: Box B1 hangs from Rope 2",
     description: "",
     descriptionTokens: {
       label: "",
@@ -320,7 +319,7 @@ export const pulleyHypergraph: Hypergraph = {
   },
   "23": {
     id: "23",
-    displayName: "Hangs: Weight W2 hangs from Rope 7",
+    displayName: "Hangs: Box B2 hangs from Rope 7",
     description: "",
     descriptionTokens: {
       label: "",
